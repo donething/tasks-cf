@@ -14,7 +14,6 @@ const check = async () => {
 
   if (text.indexOf("自由註冊當前關閉") >= 0) {
     console.log(TAG, "还未开放注册")
-    await pushTextMsg(`[青龙] ${TAG}`, "还未开放注册")
     return
   } else if (text.indexOf("password") >= 0) {
     console.log(TAG, "已开放注册，将发送通知提醒")
