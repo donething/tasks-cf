@@ -17,12 +17,12 @@ const check = async () => {
     return
   } else if (text.indexOf("password") >= 0) {
     console.log(TAG, "已开放注册，将发送通知提醒")
-    await pushTextMsg(`[青龙] ${TAG}`, "已开放注册，可以去注册了：https://discfan.net/signup.php")
+    await pushTextMsg(`${TAG}`, "已开放注册，可以去注册了：https://discfan.net/signup.php")
     return
   }
 
   console.log(TAG, "解析网页内容出错：", text)
-  await pushTextMsg(`[青龙] ${TAG}`, "解析网页内容出错")
+  await pushTextMsg(`${TAG}`, "解析网页内容出错：" + text.substring(0, 200))
 }
 
 export default check
