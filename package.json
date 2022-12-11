@@ -8,7 +8,6 @@
   },
   "private": true,
   "scripts": {
-    "start": "wrangler dev",
     "deploy": "wrangler publish"
   },
   "dependencies": {
