@@ -12,12 +12,12 @@ let agentid: number
  */
 const initWXPush = async (): Promise<boolean> => {
   if (!wxPush) {
-    if (cfEnv.QYWX_TOKEN === "") {
+    if (cfEnv.ENV_QYWX_TOKEN === "") {
       console.log("微信推送的 token 为空，无法推送消息")
       return false
     }
 
-    let data: WXToken = JSON.parse(cfEnv.QYWX_TOKEN)
+    let data: WXToken = JSON.parse(cfEnv.ENV_QYWX_TOKEN)
     wxPush = new WXQiYe(data.appid, data.secret)
     agentid = data.agentid
   }

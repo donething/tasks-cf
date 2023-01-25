@@ -2,5 +2,11 @@ name = "tasks"
 main = "src/index.ts"
 compatibility_date = "2022-11-23"
 
+kv_namespaces = [
+    { binding = "KV_TASK", id = "7b3ff7570ebe4a7da60df308a617aae7" }
+]
+
 [triggers]
-crons = ["1 * * * *"]
+# 每分钟、每小时、每月最后一天（清理任务）
+crons = ["* * * * *", "1 * * * *"]
+
