@@ -13,11 +13,16 @@ type Topic = {
 
 const TAG = "[YH]"
 // 目标网站的域名
-const host = "https://yaohuo.me"
-// 存储已回复的帖子列表的键，其值为列表，用于存放帖子ID
-const KV_KEY_Repied = "yh_repied"
+const Host = "https://yaohuo.me"
+// 可选的回复内容
+const Replies = ["吃", "吃吃", "吃吃吃"]
 
-// 请求头
+// 存储已回复的帖子列表的键，其值为列表，用于存放帖子ID
+const KV_Key_Repied = "yh_repied"
+// 存储此次回复内容的索引，避免重复回复内容。索引来自常量 Replies
+const KV_Key_Reply_Cur = "yh_reply_cur"
+
+// 妖火的 Cookie
 let yhCookie = ""
 
 /**
@@ -58,7 +63,7 @@ const getLastestTopics = async (): Promise<Topic[]> => {
 
   // 读取网页内容、提取发肉贴的链接
   const headers = {"Cookie": yhCookie}
-  const resp = await fetch(host + "/bbs/book_list.aspx?action=new", {headers: headers})
+  const resp = await fetch(Host + "/bbs/book_list.aspx?action=new", {headers: headers})
   const htmlStr = await resp.text()
 
   const $ = cheerio.load(htmlStr)
@@ -91,13 +96,15 @@ const reply = async (topics: Topic[]) => {
   const headers = {
     "Cookie": yhCookie,
     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8;",
-    "Origin": host,
+    "Origin": Host,
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " +
       "Chrome/109.0.0.0 Safari/537.36"
   }
 
   // 已回复帖子ID的列表
-  const repiedIds: string[] = await cfEnv.KV_TASK.get(KV_KEY_Repied, {type: "json"}) || []
+  const repiedIds: string[] = await cfEnv.KV_TASK.get(KV_Key_Repied, {type: "json"}) || []
+  // 此次回复内容的索引
+  let cur = Number(await cfEnv.KV_TASK.get(KV_Key_Reply_Cur) || "0")
 
   for (let t of topics) {
     // 已回复过，跳过
@@ -107,11 +114,11 @@ const reply = async (topics: Topic[]) => {
     }
 
     console.log(TAG, `开始回复帖子"${t.tid}"`)
-    const date = new Date().toLocaleTimeString("zh-CN", {timeZone: "Asia/Shanghai"})
-    const content = encodeURIComponent(`吃吃吃。${date}`)
+    // const date = new Date().toLocaleTimeString("zh-CN", {timeZone: "Asia/Shanghai"})
+    const content = encodeURIComponent(Replies[cur])
     const data = `sendmsg=0&content=${content}&action=add&id=${t.tid}&classid=${t.classid}`
 
-    const resp = await fetch(host + "/bbs/book_re.aspx", {headers: headers, method: "POST", body: data})
+    const resp = await fetch(Host + "/bbs/book_re.aspx", {headers: headers, method: "POST", body: data})
     const text = await resp.text()
     if (text.indexOf("回复成功") === -1) {
       console.log(TAG, `回复帖子"${t.tid}"失败`)
@@ -122,8 +129,12 @@ const reply = async (topics: Topic[]) => {
     // 回复成功，需要保存ID到存储
     console.log(TAG, `回复帖子"${t.tid}"成功`)
     repiedIds.push(t.tid)
-    await cfEnv.KV_TASK.put(KV_KEY_Repied, JSON.stringify(repiedIds))
+    cur++
   }
+
+  // 存储
+  await cfEnv.KV_TASK.put(KV_Key_Repied, JSON.stringify(repiedIds))
+  await cfEnv.KV_TASK.put(KV_Key_Reply_Cur, cur.toString())
 }
 
 /**
