@@ -15,7 +15,7 @@ export default {
     switch (ctr.cron) {
       // 每分钟执行一次
       case "* * * * *":
-        console.log(TAG, "执行每小分钟的任务")
+        console.log(TAG, "执行每分钟的任务")
         await doReply()
         break
 
