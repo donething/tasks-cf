@@ -16,7 +16,7 @@ export default {
       // 每分钟执行一次
       case "* * * * *":
         console.log(TAG, "执行每小分钟的任务")
-        // await doReply()
+        await doReply()
         break
 
       // 每小时执行一次
