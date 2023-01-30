@@ -115,7 +115,7 @@ const reply = async (topics: Topic[]) => {
 
     console.log(TAG, `开始回复帖子"${t.tid}"`)
     // const date = new Date().toLocaleTimeString("zh-CN", {timeZone: "Asia/Shanghai"})
-    const content = encodeURIComponent(Replies[cur])
+    const content = encodeURIComponent(Replies[cur % Replies.length])
     const data = `sendmsg=0&content=${content}&action=add&id=${t.tid}&classid=${t.classid}`
 
     const resp = await fetch(Host + "/bbs/book_re.aspx", {headers: headers, method: "POST", body: data})
