@@ -15,7 +15,7 @@ const TAG = "[YH]"
 // 目标网站的域名
 const Host = "https://yaohuo.me"
 // 可选的回复内容
-const Replies = ["吃", "吃吃", "吃吃吃"]
+const Replies = ["吃！", "吃吃！！", "吃吃吃！！！"]
 
 // 存储已回复的帖子列表的键，其值为列表，用于存放帖子ID
 const KV_Key_Repied = "yh_repied"
@@ -116,12 +116,13 @@ const reply = async (topics: Topic[]) => {
     console.log(TAG, `开始回复帖子"${t.tid}"`)
     // const date = new Date().toLocaleTimeString("zh-CN", {timeZone: "Asia/Shanghai"})
     const content = encodeURIComponent(Replies[cur % Replies.length])
-    const data = `sendmsg=0&content=${content}&action=add&id=${t.tid}&classid=${t.classid}`
+    const g = encodeURIComponent("快速回复")
+    const data = `sendmsg=0&content=${content}&action=add&id=${t.tid}&classid=${t.classid}&g=${g}`
 
     const resp = await fetch(Host + "/bbs/book_re.aspx", {headers: headers, method: "POST", body: data})
     const text = await resp.text()
     if (text.indexOf("回复成功") === -1) {
-      console.log(TAG, `回复帖子"${t.tid}"失败`)
+      console.log(TAG, `回复帖子"${t.tid}"失败：`, text)
       await pushTextMsg(`${TAG} 任务出错`, `回复帖子"${t.tid}"失败：${text}`)
       break
     }
