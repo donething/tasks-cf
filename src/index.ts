@@ -16,7 +16,7 @@ export default {
       // 每分钟执行一次
       case "* * * * *":
         console.log(TAG, "执行每分钟的任务")
-        await doReply()
+        // await doReply()
         break
 
       // 每小时执行一次
@@ -31,8 +31,6 @@ export default {
 
   async fetch(event: FetchEvent, env: Env) {
     cfEnv = env
-
-    // await doReply()
 
     return new Response("Hello, " + new Date().toLocaleString())
   }
