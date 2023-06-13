@@ -1,4 +1,4 @@
-import check from "./tasks/discfan/checkRegister"
+import checkHZT from "./tasks/discfan/checkRegister"
 import {Env} from "./entity/ctx"
 import doReply from "./tasks/yaohuo/getcoin"
 
@@ -22,7 +22,7 @@ export default {
       // 每小时执行一次
       case "1 * * * *":
         console.log(TAG, "执行每小时的任务")
-        ctx.waitUntil(check())
+        // ctx.waitUntil(checkHZT())
         break
     }
 

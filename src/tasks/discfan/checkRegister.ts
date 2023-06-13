@@ -6,7 +6,7 @@ import {pushTextMsg} from "../../util/push"
 
 const TAG = "[PT站H知堂]"
 
-const check = async () => {
+const checkHZT = async () => {
   console.log(TAG, "检测是否开放注册")
 
   let resp = await fetch("https://discfan.net/signup.php")
@@ -25,4 +25,4 @@ const check = async () => {
   await pushTextMsg(`${TAG}`, "解析网页内容出错：" + text.substring(0, 200))
 }
 
-export default check
+export default checkHZT

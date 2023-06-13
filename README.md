@@ -13,4 +13,6 @@
 
 ## 发布
 
-执行 `wrangler publish`
+1. 登录 `wrangler login`
+
+2. 发布 `wrangler publish`
