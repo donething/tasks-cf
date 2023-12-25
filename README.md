@@ -15,4 +15,4 @@
 
 1. 登录 `wrangler login`
 
-2. 发布 `wrangler publish`
+2. 发布 `wrangler deploy`

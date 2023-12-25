@@ -1,6 +1,4 @@
-import checkHZT from "./tasks/discfan/checkRegister"
 import {Env} from "./entity/ctx"
-import doReply from "./tasks/yaohuo/getcoin"
 
 const TAG = "[Tasks]"
 
